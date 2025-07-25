@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Petrona:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    text-align: center;
+    font-family: "Manrope", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #FFFDF6;
+    color: #1D1612;
+}
+
+h1 {
+    font-family: "Petrona", serif;
+    color: #516139;
+}

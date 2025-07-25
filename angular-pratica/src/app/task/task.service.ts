@@ -17,7 +17,7 @@ export class TaskService {
   addTask(title: string): Observable<Task> {
     const newTask = { title, completed: false };
     return this.http.post<Task>(this.API_URL, newTask).pipe(
-      tap(() => this.loadTasks()) // ?? TODO: perguntar sobre esse tap
+      tap(() => this.loadTasks())
     );
   }
 
@@ -31,7 +31,6 @@ export class TaskService {
     return this.http.get<Task>(`${this.API_URL}/${id}`);
   }
 
-  // aqui o update eh usado p trocar o estado de complete
   toggleTask(task: Task): Observable<void> {
     const updatedTask = { ...task, completed: !task.completed };
     return this.http.put<void>(`${this.API_URL}/${task.id}`, updatedTask).pipe(

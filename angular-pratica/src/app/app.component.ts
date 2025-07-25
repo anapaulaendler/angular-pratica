@@ -8,7 +8,6 @@ import { Task } from './task/interfaces/task.interface';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  newTaskTitle = '';
   tasks: Task[] = [];
 
   constructor(private taskService: TaskService) {}
@@ -17,15 +16,6 @@ export class AppComponent implements OnInit {
     this.taskService.loadTasks().subscribe(tasks => {
       this.tasks = tasks;
     });
-  }
-
-  addTask(): void {
-    if (this.newTaskTitle.trim()) {
-      this.taskService.addTask(this.newTaskTitle).subscribe(() => {
-        this.refreshTasks();
-        this.newTaskTitle = '';
-      });
-    }
   }
 
   toggleTask(task: Task): void {

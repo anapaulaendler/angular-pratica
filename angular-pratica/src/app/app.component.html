@@ -1,9 +1,4 @@
 <div class="container">
-  <h1>Task Manager</h1>
-
-  <input [(ngModel)]="newTaskTitle" placeholder="New task..." />
-  <button (click)="addTask()">Add</button>
-
   <ul>
     <li *ngFor="let task of tasks">
       <input type="checkbox" [checked]="task.completed" (change)="toggleTask(task)" />
@@ -12,5 +7,5 @@
     </li>
   </ul>
 
-  <p *ngIf="tasks.length === 0">No tasks yet!</p>
+  <p *ngIf="tasks.length === 0">No tasks yet! <a routerLink="/add-task">Add a new one?</a></p>
 </div>
