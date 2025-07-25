@@ -1,0 +1,14 @@
+### appsettings
+`{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "AppDbContext": "Data Source=Database.db"
+  }
+}
+`
