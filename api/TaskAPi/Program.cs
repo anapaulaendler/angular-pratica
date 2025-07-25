@@ -10,6 +10,7 @@ builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlite(builder.Configurati
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
