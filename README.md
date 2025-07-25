@@ -1,5 +1,7 @@
-### appsettings
-`{
+### appsettings.json
+
+```json
+{
   "Logging": {
     "LogLevel": {
       "Default": "Information",
@@ -11,4 +13,5 @@
     "AppDbContext": "Data Source=Database.db"
   }
 }
-`
+```
+
