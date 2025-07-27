@@ -1,11 +1,9 @@
-<div class="container">
-  <ul>
-    <li *ngFor="let task of tasks">
-      <input type="checkbox" [checked]="task.completed" (change)="toggleTask(task)" />
-      <span [class.completed]="task.completed">{{ task.title }}</span>
-      <button (click)="deleteTask(task)">DELETE</button>
-    </li>
-  </ul>
+<nav>
+  <a routerLink="/">Task List</a>
+  ⟡
+  <a routerLink="/add-task">Add Task</a>
+</nav>
 
-  <p *ngIf="tasks.length === 0">No tasks yet! <a routerLink="/add-task">Add a new one?</a></p>
-</div>
+<h1>Task Manager</h1>
+
+<router-outlet></router-outlet>
