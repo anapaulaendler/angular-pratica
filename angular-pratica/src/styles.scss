@@ -6,11 +6,22 @@
     text-align: center;
     font-family: "Manrope", sans-serif;
     font-optical-sizing: auto;
-    background-color: #FFFDF6;
-    color: #1D1612;
+    background-color: #FDF0D5;
+    color: #003049;
+    font-size: 20px;
 }
 
 h1 {
     font-family: "Petrona", serif;
-    color: #516139;
+    color: #669BBC;
+    font-size: 50px;
+}
+
+button {
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+input {
+    border-radius: 4px;
 }
