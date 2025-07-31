@@ -1,13 +1,13 @@
 <div class="container">
   <ul>
-    <li *ngFor="let task of tasks">
+    <li *ngFor="let task of tasks$ | async">
       <input type="checkbox" [checked]="task.completed" (change)="toggleTask(task)" />
       <span [class.completed]="task.completed">{{ task.title }}</span>
       <button (click)="deleteTask(task)">Delete</button>
     </li>
   </ul>
 
-  <p *ngIf="tasks.length === 0">
+  <p *ngIf="(tasks$ | async)?.length === 0">
     No tasks yet! <a routerLink="/add-task">Add a new one?</a>
   </p>
 </div>

@@ -1,30 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskService } from '../task.service';
 import { Task } from '../interfaces/task.interface';
+import { TaskStore } from '../store/task-store.service';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.scss']
+  styleUrls: ['./task-list.component.scss'],
 })
 export class TaskListComponent implements OnInit {
-  tasks: Task[] = [];
+  tasks$ = this.taskStore.tasks$;
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskStore: TaskStore) {}
 
   ngOnInit(): void {
-    this.refreshTasks();
+    this.taskStore.loadTasks();
   }
 
   toggleTask(task: Task): void {
-    this.taskService.toggleTask(task).subscribe(() => this.refreshTasks());
+    this.taskStore.toggleTask(task);
   }
 
   deleteTask(task: Task): void {
-    this.taskService.deleteTask(task.id).subscribe(() => this.refreshTasks());
-  }
-
-  private refreshTasks(): void {
-    this.taskService.loadTasks().subscribe(tasks => this.tasks = tasks);
+    this.taskStore.deleteTask(task.id);
   }
 }
