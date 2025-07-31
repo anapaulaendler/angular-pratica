@@ -8,19 +8,22 @@ import { TaskStore } from '../store/task-store.service';
   styleUrls: ['./task-list.component.scss'],
 })
 export class TaskListComponent implements OnInit {
-  tasks$ = this.taskStore.tasks$;
+  tasks$ = this._taskStore.tasks$;
+  noTasks$ = this._taskStore.noTasks$;
+  storeState$ = this._taskStore.storeState$;
+  error$ = this._taskStore.error$;
 
-  constructor(private taskStore: TaskStore) {}
+  constructor(private _taskStore: TaskStore) {}
 
   ngOnInit(): void {
-    this.taskStore.loadTasks();
+    this._taskStore.loadTasks();
   }
 
   toggleTask(task: Task): void {
-    this.taskStore.toggleTask(task);
+    this._taskStore.toggleTask(task);
   }
 
   deleteTask(task: Task): void {
-    this.taskStore.deleteTask(task.id);
+    this._taskStore.deleteTask(task.id);
   }
 }

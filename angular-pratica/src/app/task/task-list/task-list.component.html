@@ -7,7 +7,15 @@
     </li>
   </ul>
 
-  <p *ngIf="(tasks$ | async)?.length === 0">
+  <p *ngIf="(noTasks$ | async)">
     No tasks yet! <a routerLink="/add-task">Add a new one?</a>
+  </p>
+  <p *ngIf="(storeState$ | async) === 'loading'">
+    Loading tasks... Please wait.
+  </p>
+  <p *ngIf="(storeState$ | async) === 'error'">
+    <ng-container *ngIf="error$ | async as error">
+      <span class="error-message">Error: {{ error }}</span>
+    </ng-container>
   </p>
 </div>

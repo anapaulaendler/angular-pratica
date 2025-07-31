@@ -41,6 +41,7 @@ public class TasksController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTask(int id, TaskItem task)
     {
+        // return NotFound(); // (coloquei pra ver como o erro é apresentado msm)
         if (id != task.Id) return BadRequest();
 
         _context.Entry(task).State = EntityState.Modified;
