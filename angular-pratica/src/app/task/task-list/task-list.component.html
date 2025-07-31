@@ -18,4 +18,7 @@
       <span class="error-message">Error: {{ error }}</span>
     </ng-container>
   </p>
+  <p *ngIf="(storeState$ | async) === 'deleting'">
+    Deleting task... Please wait.
+  </p>
 </div>

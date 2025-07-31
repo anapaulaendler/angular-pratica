@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { Task } from '../interfaces/task.interface';
-import { tap, switchMap } from 'rxjs';
+import { tap, switchMap, delay } from 'rxjs';
 import { TaskService } from '../task.service';
 
 export enum TaskStoreState {
   Initial = 'initial',
   Loading = 'loading',
   Loaded = 'loaded',
+  Deleting = 'deleting',
+  Deleted = 'deleted',
   Error = 'error'
 }
 
@@ -101,13 +103,14 @@ export class TaskStore extends ComponentStore<TaskState> {
 
   readonly deleteTask = this.effect<number>(id$ =>
     id$.pipe(
-      tap(() => this.updateStoreState(TaskStoreState.Loading)),
+      tap(() => this.updateStoreState(TaskStoreState.Deleting)),
       switchMap(id =>
         this.taskService.deleteTask(id).pipe(
+          delay(5000), // Simulate a delay for better UX
           tapResponse(
             () => {
               this.loadTasks();
-              this.updateStoreState(TaskStoreState.Loaded);
+              this.updateStoreState(TaskStoreState.Deleted);
             },
             err => {
               const errorMsg = (err && typeof err === 'object' && 'message' in err) ? (err as any).message : String(err);
