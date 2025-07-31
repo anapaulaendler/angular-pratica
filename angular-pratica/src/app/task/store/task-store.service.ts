@@ -10,7 +10,6 @@ export interface TaskState {
 
 @Injectable({ providedIn: 'root' })
 export class TaskStore extends ComponentStore<TaskState> {
-  private readonly API_URL = 'http://localhost:5207/api/tasks';
 
   constructor(private taskService: TaskService) {
     super({ tasks: [] });
