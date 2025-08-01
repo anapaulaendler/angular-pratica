@@ -6,8 +6,12 @@ import { TaskService } from '../task.service';
 
 export enum TaskStoreState {
   Initial = 'initial',
+  Adding = 'adding',
+  Added = 'added',
   Loading = 'loading',
   Loaded = 'loaded',
+  Updating = 'updating',
+  Updated = 'updated',
   Deleting = 'deleting',
   Deleted = 'deleted',
   Error = 'error'
@@ -125,5 +129,9 @@ export class TaskStore extends ComponentStore<TaskState> {
 
   getTaskById(id: string) {
     return this.taskService.getTaskById(id);
+  }
+
+  getNewTask() {
+    return this.taskService.getNewTask();
   }
 }
