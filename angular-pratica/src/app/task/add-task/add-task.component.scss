@@ -1,3 +1,18 @@
 button {
     background-color: #669BBC;
 }
+
+label, input {
+    // display: block;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input {
+    width: 300px;
+}

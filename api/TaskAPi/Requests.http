@@ -1,2 +1,2 @@
-### Get Geral
-http://localhost:5207/api/tasks
+### Get New
+http://localhost:5207/api/tasks/new

@@ -1,4 +1,14 @@
 <div class="container">
-    <input [(ngModel)]="newTaskTitle" placeholder="New task..." />
-    <button (click)="addTask()">Add</button>
+    <form [formGroup]="taskForm" (ngSubmit)="addTask()">
+        <label>Title:</label>
+        <input formControlName="title" placeholder="Task Title"/>
+        <br>
+        <label>Description:</label>
+        <input formControlName="description" placeholder="Task Description"/>
+        <br>
+        <label>Tags:</label>
+        <input formControlName="tags" placeholder="Task Tags (comma separated)"/>
+        <br>
+        <button type="submit">Add</button>
+    </form>
 </div>

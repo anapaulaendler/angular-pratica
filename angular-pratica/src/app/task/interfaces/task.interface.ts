@@ -3,7 +3,7 @@ export interface ITask {
     title: string,
     description?: string,
     tags?: string[],
-    createdAt: Date,
+    createdAt?: Date,
     updatedAt?: Date,
     completed: boolean
 }

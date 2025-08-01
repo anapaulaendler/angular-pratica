@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskStore } from '../store/task-store.service';
+import { ITask } from '../interfaces/task.interface';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-task',
@@ -7,19 +9,44 @@ import { TaskStore } from '../store/task-store.service';
   styleUrls: ['./add-task.component.scss'],
 })
 export class AddTaskComponent implements OnInit {
-  tasks$ = this.taskStore.tasks$;
-  newTaskTitle = '';
+  tasks$ = this._taskStore.tasks$;
 
-  constructor(private taskStore: TaskStore) {}
+  taskForm = this._formBuilder.group({
+    id: ['', Validators.required],
+    title: ['', [Validators.required, Validators.minLength(3)]],
+    description: [''],
+    tags: [''],
+    completed: [false],
+  });
+
+  constructor(private _taskStore: TaskStore, private _formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.taskStore.loadTasks();
+    this._taskStore.loadTasks();
+    this.getNewTask();
   }
 
   addTask(): void {
-    if (this.newTaskTitle.trim()) {
-      this.taskStore.addTask(this.newTaskTitle);
-      this.newTaskTitle = '';
+    if (this.taskForm.value.title?.trim() && this.taskForm.valid) {
+      const formValue = this.taskForm.value;
+      const tags = formValue.tags
+      ? formValue.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag)
+      : [];
+      this._taskStore.addTask({ ...formValue, tags, } as ITask);
+      this.taskForm.reset();
     }
+  }
+
+  getNewTask(): void {
+    this._taskStore.getNewTask().subscribe((task: ITask) => {
+      console.log('Nova tarefinha: ', task);
+      this.taskForm.patchValue({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        tags: (task.tags ?? []).join(', '),
+        completed: task.completed,
+      });
+    });
   }
 }
