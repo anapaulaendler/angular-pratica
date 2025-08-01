@@ -36,8 +36,10 @@ public class TasksController : ControllerBase
 
         return task;
     }
-        
 
+    [HttpGet("new")]
+    public ActionResult<TaskItem> NewTask() => new TaskItem { };
+        
     [HttpPut("{id}")]
     public async Task<ActionResult<Guid>> UpdateTask(Guid id, TaskItem task)
     {
