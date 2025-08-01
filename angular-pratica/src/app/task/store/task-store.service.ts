@@ -63,11 +63,11 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  readonly addTask = this.effect<string>(title$ =>
-    title$.pipe(
+  readonly addTask = this.effect<ITask>(task$ =>
+    task$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Loading)),
-      switchMap(title =>
-        this.taskService.addTask(title).pipe(
+      switchMap(task =>
+        this.taskService.addTask(task).pipe(
           tapResponse(
             () => {
               this.loadTasks();

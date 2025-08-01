@@ -9,8 +9,8 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  addTask(title: string): Observable<ITask> {
-    return this.http.post<ITask>(this.API_URL, { title, completed: false });
+  addTask(task: ITask): Observable<ITask> {
+    return this.http.post<ITask>(this.API_URL, task);
   }
 
   loadTasks(): Observable<ITask[]> {
