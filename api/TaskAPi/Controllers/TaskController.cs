@@ -17,11 +17,11 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<TaskItem>> AddTask(TaskItem task)
+    public async Task<ActionResult<Guid>> AddTask(TaskItem task)
     {
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetTasks), new { id = task.Id }, task);
+        return CreatedAtAction(nameof(GetTasks), task.Id);
     }
 
     [HttpGet]
@@ -29,7 +29,7 @@ public class TasksController : ControllerBase
         await _context.Tasks.ToListAsync();
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TaskItem>> GetTask(int id)
+    public async Task<ActionResult<TaskItem>> GetTask(Guid id)
     {
         var task = await _context.Tasks.FindAsync(id);
         if (task is null) return NotFound();
@@ -39,18 +39,18 @@ public class TasksController : ControllerBase
         
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTask(int id, TaskItem task)
+    public async Task<ActionResult<Guid>> UpdateTask(Guid id, TaskItem task)
     {
-        // return NotFound(); // (coloquei pra ver como o erro é apresentado msm)
         if (id != task.Id) return BadRequest();
 
+        task.UpdatedAt = DateTime.Now;
         _context.Entry(task).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        return NoContent();
+        return Ok(id);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTask(int id)
+    public async Task<IActionResult> DeleteTask(Guid id)
     {
         var task = await _context.Tasks.FindAsync(id);
         if (task is null) return NotFound();
