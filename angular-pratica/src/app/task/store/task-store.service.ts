@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Task } from '../interfaces/task.interface';
+import { ITask } from '../interfaces/task.interface';
 import { tap, switchMap, delay } from 'rxjs';
 import { TaskService } from '../task.service';
 
@@ -14,7 +14,7 @@ export enum TaskStoreState {
 }
 
 export interface TaskState {
-  tasks: Task[];
+  tasks: ITask[];
   storeState: TaskStoreState;
   error?: string;
 }
@@ -31,7 +31,7 @@ export class TaskStore extends ComponentStore<TaskState> {
   readonly storeState$ = this.select(state => state.storeState);
   readonly error$ = this.select(state => state.error);
 
-  readonly setTasks = this.updater((state, tasks: Task[]) => ({
+  readonly setTasks = this.updater((state, tasks: ITask[]) => ({
     ...state,
     tasks
   }));
@@ -80,7 +80,7 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  readonly toggleTask = this.effect<Task>(task$ =>
+  readonly toggleTask = this.effect<ITask>(task$ =>
     task$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Loading)),
       switchMap(task => {
@@ -101,7 +101,7 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  readonly deleteTask = this.effect<number>(id$ =>
+  readonly deleteTask = this.effect<string>(id$ =>
     id$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Deleting)),
       switchMap(id =>
@@ -123,7 +123,7 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  getTaskById(id: number) {
+  getTaskById(id: string) {
     return this.taskService.getTaskById(id);
   }
 }

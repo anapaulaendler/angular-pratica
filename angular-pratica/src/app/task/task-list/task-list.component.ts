@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Task } from '../interfaces/task.interface';
+import { ITask } from '../interfaces/task.interface';
 import { TaskStore } from '../store/task-store.service';
 
 @Component({
@@ -19,11 +19,11 @@ export class TaskListComponent implements OnInit {
     this._taskStore.loadTasks();
   }
 
-  toggleTask(task: Task): void {
+  toggleTask(task: ITask): void {
     this._taskStore.toggleTask(task);
   }
 
-  deleteTask(task: Task): void {
+  deleteTask(task: ITask): void {
     this._taskStore.deleteTask(task.id);
   }
 }
