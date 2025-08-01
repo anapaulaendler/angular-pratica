@@ -26,7 +26,7 @@ export interface TaskState {
 @Injectable({ providedIn: 'root' })
 export class TaskStore extends ComponentStore<TaskState> {
 
-  constructor(private taskService: TaskService) {
+  constructor(public _taskService: TaskService) {
     super({ tasks: [], storeState: TaskStoreState.Initial });
   }
 
@@ -53,7 +53,7 @@ export class TaskStore extends ComponentStore<TaskState> {
   readonly loadTasks = this.effect<void>(trigger$ =>
     trigger$.pipe(
       switchMap(() =>
-        this.taskService.loadTasks().pipe(
+        this._taskService.loadTasks().pipe(
           tap({
             next: tasks => this.setTasks(tasks),
             error: err => console.error('Failed to load tasks', err)
@@ -67,7 +67,7 @@ export class TaskStore extends ComponentStore<TaskState> {
     task$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Loading)),
       switchMap(task =>
-        this.taskService.addTask(task).pipe(
+        this._taskService.addTask(task).pipe(
           tapResponse(
             () => {
               this.loadTasks();
@@ -88,7 +88,7 @@ export class TaskStore extends ComponentStore<TaskState> {
     task$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Loading)),
       switchMap(task => {
-        return this.taskService.toggleTask(task).pipe(
+        return this._taskService.toggleTask(task).pipe(
           tapResponse(
             () => {
               this.loadTasks();
@@ -109,7 +109,7 @@ export class TaskStore extends ComponentStore<TaskState> {
     id$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Deleting)),
       switchMap(id =>
-        this.taskService.deleteTask(id).pipe(
+        this._taskService.deleteTask(id).pipe(
           delay(5000), // Simulate a delay for better UX
           tapResponse(
             () => {
@@ -128,10 +128,10 @@ export class TaskStore extends ComponentStore<TaskState> {
   );
 
   getTaskById(id: string) {
-    return this.taskService.getTaskById(id);
+    return this._taskService.getTaskById(id);
   }
 
   getNewTask() {
-    return this.taskService.getNewTask();
+    return this._taskService.getNewTask();
   }
 }

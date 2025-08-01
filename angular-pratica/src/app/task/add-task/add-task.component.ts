@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TaskStore } from '../store/task-store.service';
 import { ITask } from '../interfaces/task.interface';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-task',
@@ -19,7 +20,7 @@ export class AddTaskComponent implements OnInit {
     completed: [false],
   });
 
-  constructor(private _taskStore: TaskStore, private _formBuilder: FormBuilder) {}
+  constructor(private _taskStore: TaskStore, private _formBuilder: FormBuilder, private _router: Router) {}
 
   ngOnInit(): void {
     this._taskStore.loadTasks();
@@ -34,6 +35,8 @@ export class AddTaskComponent implements OnInit {
       : [];
       this._taskStore.addTask({ ...formValue, tags, } as ITask);
       this.taskForm.reset();
+
+      this._router.navigate([`/${formValue.id}`]);
     }
   }
 
