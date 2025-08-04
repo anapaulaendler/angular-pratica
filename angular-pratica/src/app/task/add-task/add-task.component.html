@@ -1,7 +1,7 @@
 <div class="container">
     <form [formGroup]="taskForm" (ngSubmit)="addTask()">
         <label>Title:</label>
-        <input formControlName="title" placeholder="Task Title"/>
+        <input formControlName="title" placeholder="Task Title (min. 3 characters)"/>
         <br>
         <label>Description:</label>
         <input formControlName="description" placeholder="Task Description"/>
