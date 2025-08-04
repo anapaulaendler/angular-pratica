@@ -1,21 +1,27 @@
-<div *ngIf="taskId">
-    <p>
-        <input type="checkbox" [checked]="task?.completed" (change)="task && toggleTask(task)" />
-        <b><span>{{ task?.title }} </span></b>
-        <br>
-        <span>Description: {{ task?.description }}</span>
-        <br>
-        <span>Created At: {{ task?.createdAt }}</span>
-        <br>
-        <span>Updated At: {{ task?.updatedAt }}</span>
-        <br>
-        <ng-container *ngIf="task && task.tags && task.tags.length > 0">
-            <span>Tags: </span>
-            <span *ngFor="let tag of task?.tags; let last = last">{{ tag }}
-                <span *ngIf="!last">, </span>
-            </span>
-        </ng-container>
-        <br>
-        <button (click)="task && deleteTask(task)">Delete</button>
-</p>
-</div>
+<form *ngIf="taskForm" [formGroup]="taskForm">
+    <label>
+        <input type="checkbox" formControlName="completed"/>
+        Completed 
+    </label>
+    <br>
+
+    <label>
+        Title:
+        <input type="text" formControlName="title" placeholder="Title"/>
+    </label>
+    <br>
+
+    <label>
+        Description
+        <input type="text" formControlName="description" placeholder="Description"/>
+    </label>
+    <br>
+
+    <label>Tags:
+        <input formControlName="tags" placeholder="Tags (comma separated)"/>
+    </label>
+
+    <br>
+    <button type="button" (click)="saveTask()">Save</button>
+    <button type="button" (click)="deleteTask()">Delete</button>
+</form>

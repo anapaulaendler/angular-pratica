@@ -1,13 +1,13 @@
 <div class="container">
     <form [formGroup]="taskForm" (ngSubmit)="addTask()">
         <label>Title:</label>
-        <input formControlName="title" placeholder="Task Title (min. 3 characters)"/>
+        <input formControlName="title" placeholder="Title (min. 3 characters)"/>
         <br>
         <label>Description:</label>
-        <input formControlName="description" placeholder="Task Description"/>
+        <input formControlName="description" placeholder="Description"/>
         <br>
         <label>Tags:</label>
-        <input formControlName="tags" placeholder="Task Tags (comma separated)"/>
+        <input formControlName="tags" placeholder="Tags (comma separated)"/>
         <br>
         <button type="submit">Add</button>
     </form>

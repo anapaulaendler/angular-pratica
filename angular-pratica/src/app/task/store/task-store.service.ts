@@ -84,33 +84,11 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  readonly toggleTask = this.effect<ITask>(task$ =>
-    task$.pipe(
-      tap(() => this.updateStoreState(TaskStoreState.Loading)),
-      switchMap(task => {
-        return this._taskService.toggleTask(task).pipe(
-          tapResponse(
-            () => {
-              this.loadTasks();
-              this.updateStoreState(TaskStoreState.Loaded);
-            },
-            err => {
-              const errorMsg = (err && typeof err === 'object' && 'message' in err) ? (err as any).message : String(err);
-              this.updateError(errorMsg);
-              this.updateStoreState(TaskStoreState.Error);
-            }
-          )
-        );
-      })
-    )
-  );
-
   readonly deleteTask = this.effect<string>(id$ =>
     id$.pipe(
       tap(() => this.updateStoreState(TaskStoreState.Deleting)),
       switchMap(id =>
         this._taskService.deleteTask(id).pipe(
-          delay(5000), // Simulate a delay for better UX
           tapResponse(
             () => {
               this.loadTasks();
@@ -134,4 +112,27 @@ export class TaskStore extends ComponentStore<TaskState> {
   getNewTask() {
     return this._taskService.getNewTask();
   }
+
+  readonly updateTask = this.effect<ITask>(task$ =>
+    task$.pipe(
+      tap(() => this.updateStoreState(TaskStoreState.Updating)),
+      switchMap(task =>
+        this._taskService.updateTask(task).pipe(
+          tapResponse(
+            () => {
+              this.loadTasks(); 
+              this.updateStoreState(TaskStoreState.Updated);
+            },
+            err => {
+              const errorMsg = (err && typeof err === 'object' && 'message' in err)
+                ? (err as any).message
+                : String(err);
+              this.updateError(errorMsg);
+              this.updateStoreState(TaskStoreState.Error);
+            }
+          )
+        )
+      )
+    )
+  );
 }

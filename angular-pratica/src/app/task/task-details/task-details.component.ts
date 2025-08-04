@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TaskStore } from '../store/task-store.service';
 import { ITask } from '../interfaces/task.interface';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-task-details',
@@ -10,27 +11,61 @@ import { ITask } from '../interfaces/task.interface';
 })
 export class TaskDetailsComponent implements OnInit {
   taskId: string | null = null;
-  task: ITask | null = null;
+  taskForm: FormGroup = this._fb.group({
+    title: [''],
+    description: [''],
+    tags: [''],
+    completed: [false],
+    createdAt: [''],
+    updatedAt: ['']
+  })
 
-  constructor(private _route: ActivatedRoute, private _store: TaskStore) { }
+  constructor(private _activatedRoute: ActivatedRoute, private _store: TaskStore, private _fb: FormBuilder, private _router: Router) { }
 
   ngOnInit(): void {
-    this._route.paramMap.subscribe(paramMap => {
+    this._activatedRoute.paramMap.subscribe(paramMap => {
       this.taskId = paramMap.get('taskId');
       if (this.taskId) {
         this._store.getTaskById(this.taskId).subscribe((task: ITask) => {
-          this.task = task;
-          console.log('Olha a tarefinha:', this.task);
+          this.populateForm(task);
         });
       }
     });
   }
 
-  toggleTask(task: ITask): void {
-    this._store.toggleTask(task);
+  populateForm(task: ITask): void {
+    this.taskForm.patchValue({
+      title: task.title,
+      description: task.description,
+      completed: task.completed,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
+      tags: (task.tags ?? []).join(', '),
+    });
   }
 
-  deleteTask(task: ITask): void {
-    this._store.deleteTask(task.id);
+  deleteTask(): void {
+    if (this.taskId) this._store.deleteTask(this.taskId);
+
+    this._router.navigate([``]);
+  }
+
+  saveTask(): void {
+    if (!this.taskId) return;
+
+    const formValue = this.taskForm.value;
+    const tags = formValue.tags
+      ? formValue.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag)
+      : [];
+
+    const updatedTask: ITask = {
+      id: this.taskId,
+      ...formValue, 
+      tags,
+    };
+
+    this._store.updateTask(updatedTask); 
+
+    this._router.navigate([``]);
   }
 }

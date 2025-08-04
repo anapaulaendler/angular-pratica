@@ -20,8 +20,14 @@ h1 {
 button {
     margin-left: 10px;
     border-radius: 4px;
+    background-color: #669BBC;
 }
 
 input {
     border-radius: 4px;
+    width: auto;
+}
+
+label, input {
+    margin-bottom: 10px;
 }

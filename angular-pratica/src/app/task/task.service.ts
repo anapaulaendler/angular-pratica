@@ -30,6 +30,10 @@ export class TaskService {
     return this.http.put<void>(`${this.API_URL}/${task.id}`, updatedTask);
   }
 
+  updateTask(task: ITask): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${task.id}`, task);
+  }
+
   deleteTask(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
