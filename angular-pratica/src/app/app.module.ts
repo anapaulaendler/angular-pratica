@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AddTaskComponent } from './task/add-task/add-task.component';
 import { TaskListComponent } from './task/task-list/task-list.component';
 import { TaskDetailsComponent } from './task/task-details/task-details.component';
+import { Router } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,6 @@ import { TaskDetailsComponent } from './task/task-details/task-details.component
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { TaskStore } from '../store/task-store.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TaskStore, TaskStoreState } from '../store/task.store';
 import { ITask } from '../interfaces/task.interface';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Subject, takeUntil, withLatestFrom } from 'rxjs';
 
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.scss'],
 })
-export class AddTaskComponent implements OnInit {
+export class AddTaskComponent implements OnInit, OnDestroy {
   tasks$ = this._taskStore.tasks$;
 
   taskForm = this._formBuilder.group({
@@ -20,11 +20,33 @@ export class AddTaskComponent implements OnInit {
     completed: [false],
   });
 
-  constructor(private _taskStore: TaskStore, private _formBuilder: FormBuilder, private _router: Router) {}
+  private _ngOnDestroy$ = new Subject<void>();
+
+  constructor(
+    private _taskStore: TaskStore,
+    private _formBuilder: FormBuilder
+  ) { }
+
+  ngOnDestroy(): void {
+    this._ngOnDestroy$.next()
+    this._ngOnDestroy$.complete();
+  }
 
   ngOnInit(): void {
     this._taskStore.loadTasks();
-    this.getNewTask();
+    this._taskStore.getNewTask();
+
+    this._taskStore.storeState$
+      .pipe(withLatestFrom(this._taskStore.currentTask$), takeUntil(this._ngOnDestroy$))
+      .subscribe(
+        ([state, currentTask]) => {
+          if (state !== TaskStoreState.Received) return;
+          if (!currentTask)
+            throw new Error("Current task expected!");
+
+          this.taskForm.reset({ ...currentTask, tags: currentTask.tags?.join() });
+      }
+    )
   }
 
   addTask(): void {
@@ -32,24 +54,9 @@ export class AddTaskComponent implements OnInit {
       const formValue = this.taskForm.value;
       const tags = formValue.tags
       ? formValue.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag)
-      : [];
+        : [];
+      
       this._taskStore.addTask({ ...formValue, tags, } as ITask);
-      this.taskForm.reset();
-
-      this._router.navigate([`/${formValue.id}`]);
     }
-  }
-
-  getNewTask(): void {
-    this._taskStore.getNewTask().subscribe((task: ITask) => {
-      console.log('Nova tarefinha: ', task);
-      this.taskForm.patchValue({
-        id: task.id,
-        title: task.title,
-        description: task.description,
-        tags: (task.tags ?? []).join(', '),
-        completed: task.completed,
-      });
-    });
   }
 }
