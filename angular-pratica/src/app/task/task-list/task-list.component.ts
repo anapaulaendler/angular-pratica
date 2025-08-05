@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TaskStore } from '../store/task-store.service';
+import { TaskStore, TaskStoreState } from '../store/task.store';
 import { ITask } from '../interfaces/task.interface';
 
 @Component({
@@ -13,6 +13,8 @@ export class TaskListComponent implements OnInit {
   noTasks$ = this._taskStore.noTasks$;
   storeState$ = this._taskStore.storeState$;
   error$ = this._taskStore.error$;
+
+  public storeStates = TaskStoreState;
 
   constructor(private _taskStore: TaskStore, private _router: Router) {}
 

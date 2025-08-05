@@ -9,15 +9,15 @@
   <p *ngIf="(noTasks$ | async)">
     No tasks yet! <a routerLink="/new">Add a new one?</a>
   </p>
-  <p *ngIf="(storeState$ | async) === 'loading'">
+  <p *ngIf="(storeState$ | async) === storeStates.Loading">
     Loading tasks... Please wait.
   </p>
-  <p *ngIf="(storeState$ | async) === 'error'">
+  <p *ngIf="(storeState$ | async) === storeStates.Error">
     <ng-container *ngIf="error$ | async as error">
       <span class="error-message">Error: {{ error }}</span>
     </ng-container>
   </p>
-  <p *ngIf="(storeState$ | async) === 'deleting'">
+  <p *ngIf="(storeState$ | async) === storeStates.Deleting">
     Deleting task... Please wait.
   </p>
 </div>

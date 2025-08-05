@@ -9,6 +9,6 @@
         <label>Tags:</label>
         <input formControlName="tags" placeholder="Tags (comma separated)"/>
         <br>
-        <button type="submit">Add</button>
+        <button type="submit" [disabled]="taskForm.invalid">Add</button>
     </form>
 </div>
