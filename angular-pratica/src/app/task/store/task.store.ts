@@ -84,7 +84,7 @@ export class TaskStore extends ComponentStore<TaskState> {
           tapResponse(
             () => {
               this.updateStoreState(TaskStoreState.Loaded);
-              this._router.navigate([`/${task.id}`]);
+              this._router.navigate([`/`]);
             },
             err => {
               const errorMsg = (err && typeof err === 'object' && 'message' in err) ? (err as any).message : String(err);
@@ -93,7 +93,6 @@ export class TaskStore extends ComponentStore<TaskState> {
             }
           )
         )
-      
       )
     )
   );
