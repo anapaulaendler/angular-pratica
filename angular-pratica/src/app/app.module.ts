@@ -10,6 +10,7 @@ import { AddTaskComponent } from './task/add-task/add-task.component';
 import { TaskListComponent } from './task/task-list/task-list.component';
 import { TaskDetailsComponent } from './task/task-details/task-details.component';
 import { Router } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { Router } from '@angular/router';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   bootstrap: [AppComponent]
 })
