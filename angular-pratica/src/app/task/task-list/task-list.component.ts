@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { TaskStore, TaskStoreState } from '../store/task.store';
-import { ITask } from '../interfaces/task.interface';
+import { Dialog } from '@angular/cdk/dialog';
+import { TaskDetailsComponent } from '../task-details/task-details.component';
 
 @Component({
   selector: 'app-task-list',
@@ -16,13 +16,19 @@ export class TaskListComponent implements OnInit {
 
   public storeStates = TaskStoreState;
 
-  constructor(private _taskStore: TaskStore, private _router: Router) {}
+  constructor(
+    private _taskStore: TaskStore, 
+    private _dialog: Dialog
+  ) {}
 
   ngOnInit(): void {
     this._taskStore.loadTasks();
   }
 
-  goToTaskDetails(task: ITask): void {
-    this._router.navigate([`/${task.id}`]);
+  openTaskDialog(taskId: string): void {
+    this._dialog.open(TaskDetailsComponent, {
+      data: taskId,
+      width: '600px',
+    });
   }
 }

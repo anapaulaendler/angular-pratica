@@ -123,7 +123,7 @@ export class TaskStore extends ComponentStore<TaskState> {
       tap(() => this.updateStoreState(TaskStoreState.Loading)),
       switchMap((id) =>
         this._taskService.getTaskById(id).pipe(
-          delay(3000),
+          delay(2000),
           tapResponse(
             (response) => {
               this.setCurrentTask(response);
@@ -168,6 +168,7 @@ export class TaskStore extends ComponentStore<TaskState> {
             () => {
               this.loadTasks(); 
               this.updateStoreState(TaskStoreState.Updated);
+              this._router.navigate(['./']);
             },
             err => {
               const errorMsg = (err && typeof err === 'object' && 'message' in err)

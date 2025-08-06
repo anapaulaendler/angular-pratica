@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TaskStore, TaskStoreState } from '../store/task.store';
 import { ITask } from '../interfaces/task.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subject, takeUntil, withLatestFrom } from 'rxjs';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-task-details',
@@ -11,7 +11,6 @@ import { Observable, Subject, takeUntil, withLatestFrom } from 'rxjs';
   styleUrls: ['./task-details.component.scss']
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
-  taskId: string | null = null;
   taskForm: FormGroup = this._fb.group({
     id: [''],
     title: [''],
@@ -23,51 +22,39 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   })
 
   public loading$!: Observable<boolean>;
-
   private _ngOnDestroy = new Subject<void>();
 
   constructor(
-    private _activatedRoute: ActivatedRoute,
     private _store: TaskStore,
     private _fb: FormBuilder,
-    private _router: Router
+    @Inject(DIALOG_DATA) public taskId: string
   ) { }
   
   ngOnInit(): void {
     this.loading$ = this._store.loading$;
 
-    this._activatedRoute.paramMap.subscribe(paramMap => {
-      this.taskId = paramMap.get('taskId');
-      if (!this.taskId) return;
+    this._store.getTaskById(this.taskId);
 
-      this._store.getTaskById(this.taskId);
-
-      this._store.storeState$
-        .pipe(
-          withLatestFrom(this._store.currentTask$),
-          takeUntil(this._ngOnDestroy))
-        .subscribe(
-          ([state, currentTask]) => {
-            switch (state) {
-              case TaskStoreState.Loading:
-                this.taskForm.disable();
-                break;
-              case TaskStoreState.Loaded:
-                this.taskForm.enable();
-                if (!currentTask)
-                  throw new Error("Current task expected!");
-                this.populateForm(currentTask);
-                break;
-              case TaskStoreState.Error:
-                this.taskForm.enable();
-                break;
-            
-              default:
-                break;
-            } 
-        }
+    this._store.storeState$
+      .pipe(
+        withLatestFrom(this._store.currentTask$),
+        takeUntil(this._ngOnDestroy)
       )
-    });
+      .subscribe(([state, currentTask]) => {
+        switch (state) {
+          case TaskStoreState.Loading:
+            this.taskForm.disable();
+            break;
+          case TaskStoreState.Loaded:
+            this.taskForm.enable();
+            if (!currentTask) throw new Error('E cadê a tarefinha?');
+            this.populateForm(currentTask);
+            break;
+          case TaskStoreState.Error:
+            this.taskForm.enable();
+            break;
+        }
+      });
   }
 
   populateForm(task: ITask): void {
@@ -87,10 +74,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   saveTask(): void {
-    if (!this.taskId) return;
-
     const formValue = this.taskForm.value;
-
     const tags = formValue.tags
       ? formValue.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag)
       : [];
@@ -100,7 +84,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       tags,
     };
 
-    
     this._store.updateTask(updatedTask);
     this.taskForm.markAsPristine();
   }
