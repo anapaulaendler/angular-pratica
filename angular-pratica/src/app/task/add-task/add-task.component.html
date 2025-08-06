@@ -1,20 +1,14 @@
 <div class="container">
     <form [formGroup]="taskForm" (ngSubmit)="addTask()">
         <label>Title:</label>
-        <input formControlName="title" placeholder="Title"/>
+        <input formControlName="title" placeholder="Title (min. 3 characters)"/>
         <br>
-        <span *ngIf="taskForm.get('title')?.invalid">
-            Title must have at least 3 characters.
-            <br>
-        </span>
         <label>Description:</label>
         <input formControlName="description" placeholder="Description"/>
         <br>
         <label>Tags:</label>
-        <input formControlName="tags" placeholder="Tags"/>
+        <input formControlName="tags" placeholder="Tags (comma separated)"/>
         <br>
-        <span>Tags must be separated by comma.</span>
-        <br><Br>
         <button type="submit" [disabled]="taskForm.invalid">Add</button>
     </form>
 </div>
