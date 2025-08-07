@@ -4,6 +4,8 @@ import { ITask } from '../interfaces/task.interface';
 import { tap, switchMap, delay, withLatestFrom, EMPTY } from 'rxjs';
 import { TaskService } from '../task.service';
 import { Router } from '@angular/router';
+import { TaskDetailsComponent } from '../task-details/task-details.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export enum TaskStoreState {
   Initial = 'initial',
@@ -32,7 +34,8 @@ export class TaskStore extends ComponentStore<TaskState> {
 
   constructor(
     public _taskService: TaskService,
-    private _router: Router
+    private _router: Router,
+    private _dialog: MatDialog
   ) {
     super({ tasks: [], storeState: TaskStoreState.Initial });
   }
@@ -134,7 +137,15 @@ export class TaskStore extends ComponentStore<TaskState> {
               this.updateError(errorMsg);
               this.updateStoreState(TaskStoreState.Error);
             }
-          )
+          ),
+          switchMap(task => {
+            const dialogRef = this._dialog.open(TaskDetailsComponent, {
+              width: '600px',
+              data: task.id
+            });
+
+            return dialogRef.afterClosed();
+          })
         )
       )
     )

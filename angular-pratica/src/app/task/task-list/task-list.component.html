@@ -6,18 +6,26 @@
     </li>
   </ul>
 
-  <p *ngIf="(noTasks$ | async)">
-    No tasks yet! <a routerLink="/new">Add a new one?</a>
-  </p>
-  <p *ngIf="(storeState$ | async) === storeStates.Loading">
-    Loading tasks... Please wait.
-  </p>
-  <p *ngIf="(storeState$ | async) === storeStates.Error">
-    <ng-container *ngIf="error$ | async as error">
-      <span class="error-message">Error: {{ error }}</span>
+  <ng-container *ngIf="{
+    storeState: (storeState$ | async)!,
+    noTasks: (noTasks$ | async)!
+  } as asyncData">
+    <p *ngIf="asyncData.noTasks">
+      No tasks yet! <a routerLink="/new">Add a new one?</a>
+    </p>
+    <ng-container [ngSwitch]="asyncData.storeState">
+      <p *ngSwitchCase="storeStates.Loading">
+        Loading tasks... Please wait.
+      </p>
+      <p *ngSwitchCase="storeStates.Error">
+        <ng-container *ngIf="error$ | async as error">
+          <span class="error-message">Error: {{ error }}</span>
+        </ng-container>
+      </p>
+      <p *ngSwitchCase="storeStates.Deleting">
+        Deleting task... Please wait.
+      </p>
+      <ng-container *ngSwitchDefault></ng-container>
     </ng-container>
-  </p>
-  <p *ngIf="(storeState$ | async) === storeStates.Deleting">
-    Deleting task... Please wait.
-  </p>
+  </ng-container>
 </div>

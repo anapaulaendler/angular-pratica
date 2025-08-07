@@ -10,6 +10,8 @@ import { TaskListComponent } from './task/task-list/task-list.component';
 import { TaskDetailsComponent } from './task/task-details/task-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogModule } from '@angular/cdk/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { DialogModule } from '@angular/cdk/dialog';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    DialogModule
+    DialogModule,
+    MatDialogModule
   ],
   bootstrap: [AppComponent]
 })

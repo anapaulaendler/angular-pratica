@@ -32,9 +32,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     this.loading$ = this._store.loading$;
-
-    this._store.getTaskById(this.taskId);
-
     this._store.storeState$
       .pipe(
         withLatestFrom(this._store.currentTask$),
